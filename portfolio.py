@@ -28,15 +28,19 @@ def fetch_data(tickers):
 
     # Batch time series — 1 request for all tickers
     print("  Fetching sparklines...")
-    ts_resp = requests.get(f"{TD_BASE}/time_series", params={
+    ts_raw  = requests.get(f"{TD_BASE}/time_series", params={
         "symbol": symbols, "interval": "1day", "outputsize": 7, "apikey": TD_KEY
-    }, timeout=15).json()
+    }, timeout=15)
+    ts_resp = ts_raw.json()
+    print(f"  DEBUG ts_resp keys: {list(ts_resp.keys())[:5]}")
+    print(f"  DEBUG ts_resp sample: {str(ts_resp)[:300]}")
 
     stocks = []
     for ticker in tickers:
         try:
             q  = q_resp.get(ticker, {})
             ts = ts_resp.get(ticker, {})
+            print(f"  DEBUG {ticker} ts keys: {list(ts.keys()) if isinstance(ts, dict) else type(ts)}")
             if q.get("status") == "error" or ts.get("status") == "error":
                 print(f"  ⚠️  Skipping {ticker} — {q.get('message', 'unknown error')}")
                 continue
