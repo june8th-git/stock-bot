@@ -17,7 +17,6 @@ TD_BASE        = "https://api.twelvedata.com"
 
 
 # ── Fetch Data ────────────────────────────────────────────────────────────────
-# ── Fetch Data ────────────────────────────────────────────────────────────────
 def fetch_data(tickers):
     """Fetch one ticker at a time to stay within 8 credits/min free tier limit."""
     stocks = []
@@ -51,20 +50,10 @@ def fetch_data(tickers):
         except Exception as e:
             print(f"  ⚠️  Skipping {ticker} — {e}")
 
-        # Stay under 8 credits/min: wait 10s between each ticker (6/min max)
+        # Stay under 8 credits/min: wait 10s between tickers (6/min max)
         if i < len(tickers) - 1:
             time.sleep(10)
 
-    return stocks
-            stocks.append({
-                "ticker":     ticker,
-                "price":      round(float(q["close"]), 2),
-                "change":     round(float(q["change"]), 2),
-                "change_pct": round(float(q["percent_change"]), 2),
-                "prices":     closes,
-            })
-        except Exception as e:
-            print(f"  ⚠️  Skipping {ticker} — {e}")
     return stocks
 
 
